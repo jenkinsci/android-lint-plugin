@@ -1,0 +1,6 @@
+<j:jelly xmlns:j="jelly:core">
+  <dt>$${ANDROID_LINT_RESULT}</dt>
+  <dd>
+    Expands to the build result of the Android Lint plugin.
+  </dd>
+</j:jelly>

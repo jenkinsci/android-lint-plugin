@@ -1,0 +1,16 @@
+This feature examines XML output produced by the
+<a href="http://tools.android.com/tips/lint">Android Lint</a> tool and
+presents the results on the build page for analysis.
+<p>
+Note that this does not run Lint for you &mdash; Lint results in XML format
+must be generated and available in the build workspace for analysis to occur.
+</p>
+<p>
+For best results, run Lint in your Android application's directory, e.g.:
+<tt>cd my-app; lint --xml lint.xml .</tt><br>
+Otherwise you should add the <tt>--fullpath</tt> switch when running lint.
+</p>
+<p>
+Lint from Android SDK Tools r17 or newer should be used. Output from r16 is
+supported, but will only display limited results.
+</p>
