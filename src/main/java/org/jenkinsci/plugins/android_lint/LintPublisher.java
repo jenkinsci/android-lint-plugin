@@ -26,7 +26,7 @@ public class LintPublisher extends HealthAwarePublisher {
     private static final String PLUGIN_NAME = "android-lint";
 
     /** Default filename pattern. */
-    private static final String DEFAULT_PATTERN = "**/lint.xml";
+    private static final String DEFAULT_PATTERN = "**/lint-results.xml";
 
     private static final long serialVersionUID = 3435696173660003622L;
 
