@@ -11,7 +11,7 @@
   <artifactId>android-lint</artifactId>
   <packaging>hpi</packaging>
   <name>Android Lint Plugin</name>
-  <version>0.9.1-SNAPSHOT</version>
+  <version>1.0</version>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Android+Lint+Plugin</url>
   <description>Parses Android Lint output and displays the results for analysis.</description>
   <developers>
