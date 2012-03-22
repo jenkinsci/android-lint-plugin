@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.android_lint;
 
 import hudson.Extension;
+import hudson.Functions;
 import hudson.plugins.analysis.core.PluginDescriptor;
 
 /**
@@ -16,7 +17,7 @@ public final class LintDescriptor extends PluginDescriptor {
     public static final String PLUGIN_NAME = "androidLint";
 
     /** Used to specify location of resources. */
-    public static final String PLUGIN_ROOT = "/plugin/android-lint/";
+    public static final String PLUGIN_ROOT = Functions.getResourcePath() + "/plugin/android-lint/";
 
     /** Icon to use for the result and project action. */
     private static final String ACTION_ICON = PLUGIN_ROOT + "icons/android-24x24.png";
