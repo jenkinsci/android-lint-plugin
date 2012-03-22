@@ -1,7 +1,11 @@
 package org.jenkinsci.plugins.android_lint.parser;
 
+import java.io.Serializable;
+
 /** Represents a location of a Lint issue. */
-public class Location {
+public class Location implements Serializable {
+
+    private static final long serialVersionUID = 1128640353127613495L;
 
     private String filename;
     private int lineNumber;
