@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import com.android.tools.lint.checks.BuiltinIssueRegistry;
 import com.android.tools.lint.detector.api.Issue;
+import com.android.tools.lint.detector.api.Severity;
 
 /** A parser for Android Lint XML files. */
 public class LintParser extends AbstractAnnotationParser {
@@ -102,19 +103,18 @@ public class LintParser extends AbstractAnnotationParser {
             }
 
             // Retrieve metadata about this issue from the Lint API
-            final Priority priority;
+
+            final Issue lintIssue = getIssueType(issue);
             final String category;
             final String explanation;
-            final Issue lintIssue = getIssueType(issue);
+            final Priority priority = getPriority(issue, lintIssue);
             if (lintIssue == null) {
                 // If the issue isn't in the registry, then probably the parsed file was
                 // created with a newer version of Lint than we bundle with this plugin.
                 // The best we can do is to set some defaults and add an explanatory message
-                priority = Priority.NORMAL;
                 category = Messages.AndroidLint_Parser_UnknownCategory();
                 explanation = Messages.AndroidLint_Parser_UnknownExplanation(issue.getId());
             } else {
-                priority = getPriority(lintIssue);
                 category = lintIssue.getCategory().getFullName();
                 explanation = lintIssue.getExplanation();
             }
@@ -151,7 +151,16 @@ public class LintParser extends AbstractAnnotationParser {
      * @param issue The Lint issue.
      * @return Corresponding priority value.
      */
-    private Priority getPriority(final Issue issue) {
+    private Priority getPriority(final LintIssue parsedIssue, final Issue issue) {
+        // treat all issues with severity error as high priority
+        if (parsedIssue.severity() == Severity.ERROR) {
+            return Priority.HIGH;
+        }
+        // there is no built-in issue for this one, treat as normal
+        if (issue == null) {
+            return Priority.NORMAL;
+        }
+        // otherwise base it on predefined priority
         int priority = issue.getPriority();
         if (priority <= PRIORITY_LOW_MAXIMUM) {
             return Priority.LOW;

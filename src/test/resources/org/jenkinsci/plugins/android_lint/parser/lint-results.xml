@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues>
+
+    <issue
+        id="NewApi"
+        severity="Error"
+        message="Call requires API level 8 (current min is 7): android.view.MotionEvent#getActionIndex">
+        <location
+            file="bin/classes/InputObject.class"/>
+    </issue>
+
+    <issue
+        id="Registered"
+        severity="Warning"
+        message="The &lt;activity> MonitoredActivity is not registered in the manifest">
+        <location
+            file="bin/classes/MonitoredActivity.class"/>
+    </issue>
+
+    <issue
+        id="PxUsage"
+        severity="Warning"
+        message="Avoid using &quot;px&quot; as units; use &quot;dp&quot; instead">
+        <location
+            file="res/layout/foo.xml"
+            line="19"
+            column="11"/>
+    </issue>
+</issues>

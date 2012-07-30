@@ -3,6 +3,8 @@ package org.jenkinsci.plugins.android_lint.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.tools.lint.detector.api.Severity;
+
 /** Represents a single issue in a Lint XML file. */
 public class LintIssue {
 
@@ -56,4 +58,10 @@ public class LintIssue {
         locations.add(location);
     }
 
+    public Severity severity() {
+        for (Severity s : Severity.values()) {
+           if (s.getDescription().equals(severity)) return s;
+        }
+        return Severity.WARNING;
+    }
 }
