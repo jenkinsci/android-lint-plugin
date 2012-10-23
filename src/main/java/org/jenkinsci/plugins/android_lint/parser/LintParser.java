@@ -16,24 +16,17 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.jenkinsci.plugins.android_lint.Messages;
 import org.xml.sax.SAXException;
 
-import com.android.tools.lint.checks.BuiltinIssueRegistry;
-import com.android.tools.lint.detector.api.Issue;
-import com.android.tools.lint.detector.api.Severity;
-
 /** A parser for Android Lint XML files. */
 public class LintParser extends AbstractAnnotationParser {
 
     /** Magic value used to denote annotations which have on associated location. */
     public static final String FILENAME_UNKNOWN = "(none)";
 
-    /** Issue priorities equal to or less than this value are mapped to {@link Priority#LOW}. */
-    private static final int PRIORITY_LOW_MAXIMUM = 3;
+    /** Severity constant value from {@link com.android.tools.lint.detector.api.Severity}. */
+    private static final String SEVERITY_FATAL = "Fatal";
 
-    /** Issue priorities equal to or less than this value are mapped to {@link Priority#NORMAL}. */
-    private static final int PRIORITY_NORMAL_MAXIMUM = 7;
-
-    /** Used to access Lint's issue definitions. */
-    private static final BuiltinIssueRegistry REGISTRY = new BuiltinIssueRegistry();
+    /** Severity constant value from {@link com.android.tools.lint.detector.api.Severity}. */
+    private static final String SEVERITY_INFORMATIONAL = "Informational";
 
     private static final long serialVersionUID = 7110868408124058985L;
 
@@ -102,21 +95,14 @@ public class LintParser extends AbstractAnnotationParser {
                 lineNumber = locations[0].getLine();
             }
 
-            // Retrieve metadata about this issue from the Lint API
+            final Priority priority = getPriority(issue.getSeverity());
+            String category = issue.getCategory();
+            String explanation = issue.getExplanation();
 
-            final Issue lintIssue = getIssueType(issue);
-            final String category;
-            final String explanation;
-            final Priority priority = getPriority(issue, lintIssue);
-            if (lintIssue == null) {
-                // If the issue isn't in the registry, then probably the parsed file was
-                // created with a newer version of Lint than we bundle with this plugin.
-                // The best we can do is to set some defaults and add an explanatory message
+            // If category is missing the file is from pre-r21 Lint, so show an explanation
+            if (category == null) {
                 category = Messages.AndroidLint_Parser_UnknownCategory();
                 explanation = Messages.AndroidLint_Parser_UnknownExplanation(issue.getId());
-            } else {
-                category = lintIssue.getCategory().getFullName();
-                explanation = lintIssue.getExplanation();
             }
 
             // Create annotation
@@ -124,13 +110,26 @@ public class LintParser extends AbstractAnnotationParser {
                     StringEscapeUtils.escapeHtml(issue.getMessage()),
                     category, issue.getId(), lineNumber);
             annotation.setExplanation(explanation);
+            annotation.setErrorLines(StringEscapeUtils.escapeHtml(issue.getErrorLine1()),
+                    StringEscapeUtils.escapeHtml(issue.getErrorLine2()));
             annotation.setModuleName(moduleName);
             annotation.setFileName(filename);
-            if (lineNumber != 0) {
+
+            // Generate a hash to uniquely identify this issue and its context (i.e. source code),
+            // so that we can detect in later builds whether this issue still exists, or was fixed
+            if (lineNumber == 0) {
+                // This issue is for a non-source file, so use the issue type and filename
+                int hashcode = String.format("%s:%s", filename, issue.getId()).hashCode();
+                annotation.setContextHashCode(hashcode);
+            } else {
+                // This is a source file (i.e. Java or XML), so use a few lines of context
+                // surrounding the line on which the issue first occurs, so that we can detect
+                // whether this issue still exists later, even if the line numbers have changed
                 try {
                     annotation.setContextHashCode(createContextHashCode(filename, lineNumber));
                 } catch (IOException e) {
-                    // Filename is probably not relative to the workspace root; nothing we can do
+                    // Filename is probably not relative to the workspace root, so we can't read out
+                    // the surrounding context of this issue. Nothing we can do about this
                 }
             }
 
@@ -146,38 +145,19 @@ public class LintParser extends AbstractAnnotationParser {
     }
 
     /**
-     * Maps a numeric Lint issue priority to an analysis-core priority value.
+     * Maps a Lint issue severity to an analysis-core priority value.
      *
-     * @param issue The Lint issue.
+     * @param severity Issue severity value read from XML.
      * @return Corresponding priority value.
      */
-    private Priority getPriority(final LintIssue parsedIssue, final Issue issue) {
-        // treat all issues with severity error as high priority
-        if (parsedIssue.severity() == Severity.ERROR) {
+    private Priority getPriority(String severity) {
+        if (SEVERITY_FATAL.equals(severity)) {
             return Priority.HIGH;
         }
-        // there is no built-in issue for this one, treat as normal
-        if (issue == null) {
-            return Priority.NORMAL;
-        }
-        // otherwise base it on predefined priority
-        int priority = issue.getPriority();
-        if (priority <= PRIORITY_LOW_MAXIMUM) {
+        if (SEVERITY_INFORMATIONAL.equals(severity)) {
             return Priority.LOW;
-        } else if (priority <= PRIORITY_NORMAL_MAXIMUM) {
-            return Priority.NORMAL;
         }
-        return Priority.HIGH;
-    }
-
-    /**
-     * Retrieves the issue type that was triggered.
-     *
-     * @param issue The parsed issue.
-     * @return The corresponding Lint issue object.
-     */
-    private Issue getIssueType(final LintIssue issue) {
-        return REGISTRY.getIssue(issue.getId());
+        return Priority.NORMAL;
     }
 
 }

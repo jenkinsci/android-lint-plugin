@@ -3,9 +3,11 @@ package org.jenkinsci.plugins.android_lint.parser;
 import hudson.plugins.analysis.util.model.AbstractAnnotation;
 import hudson.plugins.analysis.util.model.Priority;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 /** An analysis-core Annotation representing a potential bug as determined by Lint. */
 public class LintAnnotation extends AbstractAnnotation {
@@ -21,6 +23,9 @@ public class LintAnnotation extends AbstractAnnotation {
     /** Issue explanation text. */
     private String explanation;
 
+    /** Lines pinpointing where the error occurred. */
+    private final List<String> errorLines;
+
     /**
      * Constructor.
      *
@@ -33,12 +38,28 @@ public class LintAnnotation extends AbstractAnnotation {
     public LintAnnotation(final Priority priority, final String message, final String category,
             final String type, final int lineNumber) {
         super(priority, message, lineNumber, lineNumber, category, type);
+        errorLines = new ArrayList<String>();
         setOrigin(ORIGIN);
     }
 
     /** @param explanation An explanation of the Lint rule violated. */
     public void setExplanation(final String explanation) {
         this.explanation = explanation;
+    }
+
+    /** Sets the error lines for this issue. */
+    public void setErrorLines(String... lines) {
+        errorLines.clear();
+        for (String line : lines) {
+            if (line != null) {
+                errorLines.add(line);
+            }
+        }
+    }
+
+    /** @return A list of locations where the issue occurs. */
+    public List<String> getErrorLines() {
+        return Collections.unmodifiableList(errorLines);
     }
 
     /**
@@ -61,6 +82,17 @@ public class LintAnnotation extends AbstractAnnotation {
         message.append("<p>");
         message.append(explanation);
 
+        // Add error context information
+        if (!errorLines.isEmpty()) {
+            message.append("<div style='color:#d00'><b><pre>");
+            for (String line : errorLines) {
+                message.append(line);
+                message.append('\n');
+            }
+            message.append("</pre></b></div>");
+        }
+
+        // Show additional locations, if any
         if (locations.size() != 0) {
             message.append("<p/><b>");
             message.append("Additional locations:");
@@ -72,6 +104,7 @@ public class LintAnnotation extends AbstractAnnotation {
                 message.append("</li>");
             }
             message.append("</ul>");
+
         }
 
         message.append("</p>");
