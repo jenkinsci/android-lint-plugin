@@ -35,7 +35,7 @@ public class LintParserTest extends TestCase {
         assertEquals("Call requires API level 8 (current min is 7): "
                 + "android.view.MotionEvent#getActionIndex",
                 a.getMessage());
-        assertEquals(Priority.NORMAL, a.getPriority());
+        assertEquals(Priority.HIGH, a.getPriority());
         assertEquals("bin/classes/InputObject.class", a.getFileName());
         assertEquals("NewApi", a.getType());
         assertUnknownIssue(a);

@@ -26,6 +26,9 @@ public class LintParser extends AbstractAnnotationParser {
     private static final String SEVERITY_FATAL = "Fatal";
 
     /** Severity constant value from {@link com.android.tools.lint.detector.api.Severity}. */
+    private static final String SEVERITY_ERROR = "Error";
+
+    /** Severity constant value from {@link com.android.tools.lint.detector.api.Severity}. */
     private static final String SEVERITY_INFORMATIONAL = "Informational";
 
     private static final long serialVersionUID = 7110868408124058985L;
@@ -151,7 +154,7 @@ public class LintParser extends AbstractAnnotationParser {
      * @return Corresponding priority value.
      */
     private Priority getPriority(String severity) {
-        if (SEVERITY_FATAL.equals(severity)) {
+        if (SEVERITY_FATAL.equals(severity) || SEVERITY_ERROR.equals(severity)) {
             return Priority.HIGH;
         }
         if (SEVERITY_INFORMATIONAL.equals(severity)) {

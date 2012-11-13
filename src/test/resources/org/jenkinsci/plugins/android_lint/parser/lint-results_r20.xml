@@ -4,7 +4,7 @@
     <!-- Should be mapped to "HIGH" priority -->
     <issue id="UnknownId" severity="Fatal"/>
 
-    <!-- Should be mapped to "NORMAL" priority -->
+    <!-- Should be mapped to "HIGH" priority -->
     <issue
         id="NewApi"
         severity="Error"
