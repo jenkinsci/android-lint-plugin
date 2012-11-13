@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import com.google.common.annotations.VisibleForTesting;
+
 /** An analysis-core Annotation representing a potential bug as determined by Lint. */
 public class LintAnnotation extends AbstractAnnotation {
 
@@ -47,6 +49,11 @@ public class LintAnnotation extends AbstractAnnotation {
         this.explanation = explanation;
     }
 
+    @VisibleForTesting
+    String getExplanation() {
+        return this.explanation;
+    }
+
     /** Sets the error lines for this issue. */
     public void setErrorLines(String... lines) {
         errorLines.clear();
@@ -63,7 +70,7 @@ public class LintAnnotation extends AbstractAnnotation {
     }
 
     /**
-     * Adds a location where this issue occurs.
+     * Adds an additional location where this issue occurs.
      *
      * @param location A location of this issue.
      */
@@ -71,7 +78,10 @@ public class LintAnnotation extends AbstractAnnotation {
         locations.add(location);
     }
 
-    /** @return A list of locations where the issue occurs. */
+    /**
+     * @return A list of locations (beyond the one specified by {@link #getFileName()}) where the
+     *         issue occurs.
+     */
     public Collection<Location> getLocations() {
         return Collections.unmodifiableCollection(locations);
     }

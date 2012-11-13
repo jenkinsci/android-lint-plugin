@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="3" by="lint 21">
+
+    <!-- Issue with location and full context information -->
+    <issue
+      id="UsesMinSdkAttributes"
+      severity="Warning"
+      message="&lt;uses-sdk> tag should specify a target API level (the highest verified version; when running on later versions, compatibility behaviors may be enabled) with android:targetSdkVersion=&quot;?&quot;"
+      category="Correctness"
+      priority="9"
+      summary="Checks that the minimum SDK and target SDK attributes are defined"
+      explanation="The manifest should contain a `&lt;uses-sdk>` element which defines the minimum API Level required for the application to run, as well as the target version (the highest API level you have tested the version for.)"
+      url="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html"
+      errorLine1="    &lt;uses-sdk android:minSdkVersion=&quot;7&quot; />"
+      errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+          file="AndroidManifest.xml"
+          line="9"
+          column="5" />
+    </issue>
+
+    <!-- Issue in a non-source file -->
+    <issue
+      id="IconLocation"
+      severity="Warning"
+      message="Found bitmap drawable res/drawable/thumbnail.png in densityless folder"
+      category="Usability:Icons"
+      priority="5"
+      summary="Ensures that images are not defined in the density-independent drawable folder"
+      explanation="The res/drawable folder is intended for density-independent graphics..."
+      url="http://developer.android.com/guide/practices/screens_support.html">
+        <location file="res/drawable/thumbnail.png"/>
+    </issue>
+
+    <!-- Issue with multiple locations -->
+    <issue
+      id="MissingTranslation"
+      severity="Warning"
+      message="Translation 'foo_bar' is missing.">
+        <location file="res/values-de/strings.xml"/>
+        <location file="res/values-en-rGB/strings.xml"/>
+        <location file="res/values-fr/strings.xml"/>
+    </issue>
+
+</issues>

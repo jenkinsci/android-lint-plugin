@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <issues>
 
+    <!-- Should be mapped to "HIGH" priority -->
+    <issue id="UnknownId" severity="Fatal"/>
+
+    <!-- Should be mapped to "NORMAL" priority -->
     <issue
         id="NewApi"
         severity="Error"
@@ -9,6 +13,7 @@
             file="bin/classes/InputObject.class"/>
     </issue>
 
+    <!-- Should be mapped to "NORMAL" priority -->
     <issue
         id="Registered"
         severity="Warning"
@@ -17,9 +22,10 @@
             file="bin/classes/MonitoredActivity.class"/>
     </issue>
 
+    <!-- Should be mapped to "LOW" priority -->
     <issue
         id="PxUsage"
-        severity="Warning"
+        severity="Informational"
         message="Avoid using &quot;px&quot; as units; use &quot;dp&quot; instead">
         <location
             file="res/layout/foo.xml"
