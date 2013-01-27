@@ -62,6 +62,8 @@ public class LintPublisher extends HealthAwarePublisher {
      * @param canRunOnFailed Determines whether the plugin can also run for failed builds.
      * @param shouldDetectModules Determines whether module names should be derived from Maven POM
      *            or Ant build files.
+     * @param canComputeNew determines whether new warnings should be computed (with
+     * 			  respect to baseline)
      * @param pattern Ant fileset pattern used to scan for Lint files.
      */
     @DataBoundConstructor
@@ -74,13 +76,14 @@ public class LintPublisher extends HealthAwarePublisher {
             final String failedTotalAll, final String failedTotalHigh,
             final String failedTotalNormal, final String failedTotalLow, final String failedNewAll,
             final String failedNewHigh, final String failedNewNormal, final String failedNewLow,
-            final boolean canRunOnFailed, final boolean shouldDetectModules, final String pattern) {
+            final boolean canRunOnFailed, final boolean shouldDetectModules, final boolean canComputeNew,
+            final String pattern) {
         super(healthy, unHealthy, thresholdLimit, defaultEncoding, useDeltaValues,
                 unstableTotalAll, unstableTotalHigh, unstableTotalNormal, unstableTotalLow,
                 unstableNewAll, unstableNewHigh, unstableNewNormal, unstableNewLow,
                 failedTotalAll, failedTotalHigh, failedTotalNormal, failedTotalLow,
                 failedNewAll, failedNewHigh, failedNewNormal, failedNewLow,
-                canRunOnFailed, shouldDetectModules, true, PLUGIN_NAME);
+                canRunOnFailed, shouldDetectModules, canComputeNew, PLUGIN_NAME);
         this.pattern = pattern;
     }
 
