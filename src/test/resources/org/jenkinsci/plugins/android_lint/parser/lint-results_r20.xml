@@ -25,7 +25,7 @@
     <!-- Should be mapped to "LOW" priority -->
     <issue
         id="PxUsage"
-        severity="Informational"
+        severity="Information"
         message="Avoid using &quot;px&quot; as units; use &quot;dp&quot; instead">
         <location
             file="res/layout/foo.xml"

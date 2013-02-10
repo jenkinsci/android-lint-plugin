@@ -29,7 +29,7 @@ public class LintParser extends AbstractAnnotationParser {
     private static final String SEVERITY_ERROR = "Error";
 
     /** Severity constant value from {@link com.android.tools.lint.detector.api.Severity}. */
-    private static final String SEVERITY_INFORMATIONAL = "Informational";
+    private static final String SEVERITY_INFORMATIONAL = "Information";
 
     private static final long serialVersionUID = 7110868408124058985L;
 
