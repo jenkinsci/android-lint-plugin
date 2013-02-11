@@ -37,7 +37,7 @@ public class LintPublisher extends HealthAwarePublisher {
      * Constructor.
      *
      * @param healthy Report health as 100% when the number of warnings is less than this value.
-     * @param unhealthy Report health as 0% when the number of warnings is greater than this value.
+     * @param unHealthy Report health as 0% when the number of warnings is greater than this value.
      * @param thresholdLimit Determines which warning priorities should be considered when
      *            evaluating the build stability and health.
      * @param defaultEncoding The default encoding to be used when reading files.
@@ -62,10 +62,12 @@ public class LintPublisher extends HealthAwarePublisher {
      * @param canRunOnFailed Determines whether the plugin can also run for failed builds.
      * @param shouldDetectModules Determines whether module names should be derived from Maven POM
      *            or Ant build files.
+     * @param canComputeNew determines whether new warnings should be computed (with
+     * 			  respect to baseline)
      * @param pattern Ant fileset pattern used to scan for Lint files.
      */
     @DataBoundConstructor
-    public LintPublisher(final String healthy, final String unhealthy, final String thresholdLimit,
+    public LintPublisher(final String healthy, final String unHealthy, final String thresholdLimit,
             final String defaultEncoding, final boolean useDeltaValues,
             final String unstableTotalAll, final String unstableTotalHigh,
             final String unstableTotalNormal, final String unstableTotalLow,
@@ -74,13 +76,14 @@ public class LintPublisher extends HealthAwarePublisher {
             final String failedTotalAll, final String failedTotalHigh,
             final String failedTotalNormal, final String failedTotalLow, final String failedNewAll,
             final String failedNewHigh, final String failedNewNormal, final String failedNewLow,
-            final boolean canRunOnFailed, final boolean shouldDetectModules, final String pattern) {
-        super(healthy, unhealthy, thresholdLimit, defaultEncoding, useDeltaValues,
+            final boolean canRunOnFailed, final boolean shouldDetectModules, final boolean canComputeNew,
+            final String pattern) {
+        super(healthy, unHealthy, thresholdLimit, defaultEncoding, useDeltaValues,
                 unstableTotalAll, unstableTotalHigh, unstableTotalNormal, unstableTotalLow,
                 unstableNewAll, unstableNewHigh, unstableNewNormal, unstableNewLow,
                 failedTotalAll, failedTotalHigh, failedTotalNormal, failedTotalLow,
                 failedNewAll, failedNewHigh, failedNewNormal, failedNewLow,
-                canRunOnFailed, shouldDetectModules, true, PLUGIN_NAME);
+                canRunOnFailed, shouldDetectModules, canComputeNew, PLUGIN_NAME);
         this.pattern = pattern;
     }
 
