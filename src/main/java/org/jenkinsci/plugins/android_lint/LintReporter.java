@@ -91,8 +91,7 @@ public class LintReporter extends HealthAwareReporter<LintResult> {
 
     @Override
     protected boolean acceptGoal(final String goal) {
-        return "android-lint".equals(goal) || "site".equals(goal) || "report".equals(goal)
-                || "check".equals(goal);
+        return "lint".equals(goal);
     }
 
     @Override
