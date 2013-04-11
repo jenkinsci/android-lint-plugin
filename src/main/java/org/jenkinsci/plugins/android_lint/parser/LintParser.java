@@ -100,7 +100,7 @@ public class LintParser extends AbstractAnnotationParser {
 
             final Priority priority = getPriority(issue.getSeverity());
             String category = issue.getCategory();
-            String explanation = issue.getExplanation();
+            String explanation = StringEscapeUtils.escapeHtml(issue.getExplanation());
 
             // If category is missing the file is from pre-r21 Lint, so show an explanation
             if (category == null) {
