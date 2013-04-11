@@ -71,7 +71,7 @@ public class LintParserTest extends TestCase {
         assertEquals(9, a.getPrimaryLineNumber());
         assertEquals("UsesMinSdkAttributes", a.getType());
         assertEquals("Correctness", a.getCategory());
-        assertEquals("The manifest should contain a `<uses-sdk>` element which defines the "
+        assertEquals("The manifest should contain a `&lt;uses-sdk&gt;` element which defines the "
                 + "minimum API Level required for the application to run, as well as the target "
                 + "version (the highest API level you have tested the version for.)",
                 a.getExplanation());
