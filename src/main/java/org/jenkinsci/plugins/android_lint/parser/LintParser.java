@@ -100,7 +100,7 @@ public class LintParser extends AbstractAnnotationParser {
 
             final Priority priority = getPriority(issue.getSeverity());
             String category = issue.getCategory();
-            String explanation = StringEscapeUtils.escapeHtml(issue.getExplanation());
+            String explanation = StringEscapeUtils.escapeXml(issue.getExplanation());
 
             // If category is missing the file is from pre-r21 Lint, so show an explanation
             if (category == null) {
@@ -112,8 +112,8 @@ public class LintParser extends AbstractAnnotationParser {
             LintAnnotation annotation = new LintAnnotation(priority, issue.getMessage(),
                     category, issue.getId(), lineNumber);
             annotation.setExplanation(explanation);
-            annotation.setErrorLines(StringEscapeUtils.escapeHtml(issue.getErrorLine1()),
-                    StringEscapeUtils.escapeHtml(issue.getErrorLine2()));
+            annotation.setErrorLines(StringEscapeUtils.escapeXml(issue.getErrorLine1()),
+                    StringEscapeUtils.escapeXml(issue.getErrorLine2()));
             annotation.setModuleName(moduleName);
             annotation.setFileName(filename);
 
