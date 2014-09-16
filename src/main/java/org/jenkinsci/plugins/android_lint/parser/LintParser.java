@@ -109,8 +109,7 @@ public class LintParser extends AbstractAnnotationParser {
             }
 
             // Create annotation
-            LintAnnotation annotation = new LintAnnotation(priority,
-                    StringEscapeUtils.escapeHtml(issue.getMessage()),
+            LintAnnotation annotation = new LintAnnotation(priority, issue.getMessage(),
                     category, issue.getId(), lineNumber);
             annotation.setExplanation(explanation);
             annotation.setErrorLines(StringEscapeUtils.escapeHtml(issue.getErrorLine1()),

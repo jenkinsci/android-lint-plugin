@@ -91,7 +91,7 @@ public class LintParserTest extends TestCase {
         assertEquals(0, a.getPrimaryLineNumber());
 
         a = annotations.get(2);
-        assertEquals("Translation 'foo_bar' is missing.", a.getMessage());
+        assertEquals("Translation &apos;foo_bar&apos; is missing.", a.getMessage());
         assertEquals(Priority.NORMAL, a.getPriority());
         assertEquals("MissingTranslation", a.getType());
         Location[] locs = a.getLocations().toArray(new Location[0]);
