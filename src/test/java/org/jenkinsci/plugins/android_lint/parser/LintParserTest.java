@@ -3,6 +3,8 @@ package org.jenkinsci.plugins.android_lint.parser;
 
 import hudson.plugins.analysis.util.model.FileAnnotation;
 import hudson.plugins.analysis.util.model.Priority;
+import org.jenkinsci.plugins.android_lint.Messages;
+import org.junit.Test;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -11,15 +13,15 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-import org.jenkinsci.plugins.android_lint.Messages;
-
-public class LintParserTest extends TestCase {
+public class LintParserTest {
 
     private static final String MODULE_NAME = "test";
 
     // No explanations should be available for any issues
+    @Test
     public void testParser_pre_r21() throws Exception {
         List<LintAnnotation> annotations = parseResults("lint-results_r20.xml");
         assertEquals(4, annotations.size());
@@ -58,6 +60,7 @@ public class LintParserTest extends TestCase {
     }
 
     // Explanations and context info should be available from r21
+    @Test
     public void testParser_post_r21() throws Exception {
         List<LintAnnotation> annotations = parseResults("lint-results_r21.xml");
         assertEquals(3, annotations.size());
