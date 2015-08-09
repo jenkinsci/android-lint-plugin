@@ -4,8 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>1.52</version>
-    <relativePath>../analysis-pom/pom.xml</relativePath>
+    <version>1.63</version>
   </parent>
 
   <artifactId>android-lint</artifactId>
@@ -14,6 +13,11 @@
   <version>2.3-SNAPSHOT</version>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Android+Lint+Plugin</url>
   <description>Parses Android Lint output and displays the results for analysis.</description>
+
+  <properties>
+    <workflow-jenkins-plugin.version>1.4</workflow-jenkins-plugin.version>
+  </properties>
+
   <developers>
     <developer>
       <id>orrc</id>
@@ -27,7 +31,25 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>analysis-core</artifactId>
-      <version>1.61</version>
+      <version>1.73-beta-SNAPSHOT</version><!-- TODO: change to 1.73 before release -->
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-job</artifactId>
+      <version>${workflow-jenkins-plugin.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-cps</artifactId>
+      <version>${workflow-jenkins-plugin.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-basic-steps</artifactId>
+      <version>${workflow-jenkins-plugin.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

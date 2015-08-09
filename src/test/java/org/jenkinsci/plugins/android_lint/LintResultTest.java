@@ -1,11 +1,11 @@
-package org.jenkinsci.plugins.android_lint.parser;
+package org.jenkinsci.plugins.android_lint;
 
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.plugins.analysis.core.FilesParser;
 import hudson.plugins.analysis.core.ParserResult;
 import hudson.plugins.analysis.util.model.Priority;
-import org.jenkinsci.plugins.android_lint.LintResult;
+import org.jenkinsci.plugins.android_lint.parser.LintParser;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.ExtractResourceSCM;

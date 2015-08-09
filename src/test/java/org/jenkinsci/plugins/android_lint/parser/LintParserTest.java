@@ -43,8 +43,7 @@ public class LintParserTest {
         assertUnknownIssue(a);
 
         a = annotations.get(2);
-        assertEquals("The &lt;activity&gt; MonitoredActivity is not registered in the manifest",
-                a.getMessage());
+        assertEquals("The <activity> MonitoredActivity is not registered in the manifest", a.getMessage());
         assertEquals(Priority.NORMAL, a.getPriority());
         assertEquals("bin/classes/MonitoredActivity.class", a.getFileName());
         assertEquals("Registered", a.getType());
@@ -52,8 +51,7 @@ public class LintParserTest {
 
         a = annotations.get(3);
         assertEquals(Priority.LOW, a.getPriority());
-        assertEquals("Avoid using &quot;px&quot; as units; use &quot;dp&quot; instead",
-                a.getMessage());
+        assertEquals("Avoid using \"px\" as units; use \"dp\" instead", a.getMessage());
         assertEquals("res/layout/foo.xml", a.getFileName());
         assertEquals(19, a.getPrimaryLineNumber());
         assertUnknownIssue(a);
@@ -66,9 +64,9 @@ public class LintParserTest {
         assertEquals(3, annotations.size());
 
         LintAnnotation a = annotations.get(0);
-        assertEquals("&lt;uses-sdk&gt; tag should specify a target API level (the highest "
+        assertEquals("<uses-sdk> tag should specify a target API level (the highest "
                 + "verified version; when running on later versions, compatibility behaviors may "
-                + "be enabled) with android:targetSdkVersion=&quot;?&quot;", a.getMessage());
+                + "be enabled) with android:targetSdkVersion=\"?\"", a.getMessage());
         assertEquals(Priority.NORMAL, a.getPriority());
         assertEquals("AndroidManifest.xml", a.getFileName());
         assertEquals(9, a.getPrimaryLineNumber());
@@ -78,8 +76,7 @@ public class LintParserTest {
                 + "minimum API Level required for the application to run, as well as the target "
                 + "version (the highest API level you have tested the version for.)",
                 a.getExplanation());
-        assertEquals("    &lt;uses-sdk android:minSdkVersion=&quot;7&quot; /&gt;", //
-                a.getErrorLines().get(0));
+        assertEquals("    &lt;uses-sdk android:minSdkVersion=&quot;7&quot; /&gt;", a.getErrorLines().get(0));
         assertEquals("    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", a.getErrorLines().get(1));
 
         a = annotations.get(1);
@@ -94,7 +91,7 @@ public class LintParserTest {
         assertEquals(0, a.getPrimaryLineNumber());
 
         a = annotations.get(2);
-        assertEquals("Translation &apos;foo_bar&apos; is missing.", a.getMessage());
+        assertEquals("Translation 'foo_bar' is missing.", a.getMessage());
         assertEquals(Priority.NORMAL, a.getPriority());
         assertEquals("MissingTranslation", a.getType());
         Location[] locs = a.getLocations().toArray(new Location[0]);

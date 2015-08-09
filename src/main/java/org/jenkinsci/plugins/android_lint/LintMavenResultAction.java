@@ -64,10 +64,9 @@ public class LintMavenResultAction extends MavenResultAction<LintResult> {
     }
 
     @Override
-    protected LintResult createResult(final LintResult existingResult,
-            final LintResult additionalResult) {
-        return new LintReporterResult(getOwner(), additionalResult.getDefaultEncoding(),
-                aggregate(existingResult, additionalResult));
+    protected LintResult createResult(final LintResult existingResult, final LintResult additionalResult) {
+        return new LintReporterResult(getOwner(), additionalResult.getDefaultEncoding(), aggregate(existingResult,
+                additionalResult), false, false);
     }
 
 }

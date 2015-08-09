@@ -1,12 +1,10 @@
 package org.jenkinsci.plugins.android_lint;
 
+import hudson.FilePath;
 import hudson.Launcher;
 import hudson.matrix.MatrixAggregator;
 import hudson.matrix.MatrixBuild;
-import hudson.model.Action;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
+import hudson.model.*;
 import hudson.plugins.analysis.core.BuildResult;
 import hudson.plugins.analysis.core.FilesParser;
 import hudson.plugins.analysis.core.HealthAwarePublisher;
@@ -18,6 +16,7 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.android_lint.parser.LintParser;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 
 /** Publishes the results of parsing an Android lint file. */
 public class LintPublisher extends HealthAwarePublisher {
@@ -31,7 +30,7 @@ public class LintPublisher extends HealthAwarePublisher {
     private static final long serialVersionUID = 3435696173660003622L;
 
     /** Ant fileset pattern of files to work with. */
-    private final String pattern;
+    private String pattern;
 
     /**
      * Constructor.
@@ -63,10 +62,12 @@ public class LintPublisher extends HealthAwarePublisher {
      * @param shouldDetectModules Determines whether module names should be derived from Maven POM
      *            or Ant build files.
      * @param canComputeNew determines whether new warnings should be computed (with
-     * 			  respect to baseline)
+     *            respect to baseline)
      * @param pattern Ant fileset pattern used to scan for Lint files.
+     *
+     * @deprecated see {@link #LintPublisher()}
      */
-    @DataBoundConstructor
+    @Deprecated
     public LintPublisher(final String healthy, final String unHealthy, final String thresholdLimit,
             final String defaultEncoding, final boolean useDeltaValues,
             final String unstableTotalAll, final String unstableTotalHigh,
@@ -87,6 +88,11 @@ public class LintPublisher extends HealthAwarePublisher {
         this.pattern = pattern;
     }
 
+    @DataBoundConstructor
+    public LintPublisher() {
+        super(PLUGIN_NAME);
+    }
+
     /**
      * Returns the Ant fileset pattern of files to work with.
      *
@@ -96,23 +102,32 @@ public class LintPublisher extends HealthAwarePublisher {
         return pattern;
     }
 
+    /**
+     * Sets the Ant file-set pattern of files to work with.
+     */
+    @DataBoundSetter
+    public void setPattern(final String pattern) {
+        this.pattern = pattern;
+    }
+
     @Override
     public Action getProjectAction(final AbstractProject<?, ?> project) {
         return new LintProjectAction(project);
     }
 
     @Override
-    public BuildResult perform(final AbstractBuild<?, ?> build, final PluginLogger logger)
+    public BuildResult perform(final Run<?, ?> build, final FilePath workspace, final PluginLogger logger)
             throws InterruptedException, IOException {
         logger.log(Messages.AndroidLint_Publisher_CollectingFiles());
-        FilesParser lintCollector = new FilesParser(PLUGIN_NAME,
+        FilesParser parser = new FilesParser(PLUGIN_NAME,
                 StringUtils.defaultIfEmpty(getPattern(), DEFAULT_PATTERN),
                 new LintParser(getDefaultEncoding()), shouldDetectModules(), isMavenBuild(build));
-        ParserResult project = build.getWorkspace().act(lintCollector);
+
+        ParserResult project = workspace.act(parser);
         logger.logLines(project.getLogMessages());
 
-        LintResult result = new LintResult(build, getDefaultEncoding(), project);
-        build.getActions().add(new LintResultAction(build, this, result));
+        LintResult result = new LintResult(build, getDefaultEncoding(), project, false, false);
+        build.addAction(new LintResultAction(build, this, result));
 
         return result;
     }
