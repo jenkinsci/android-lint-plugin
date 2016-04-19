@@ -82,6 +82,7 @@ public class LintResult extends BuildResult {
                         final boolean useStableBuildAsReference,
                         final Class<? extends ResultAction<LintResult>> actionType) {
         super(build, new BuildHistory(build, actionType, usePreviousBuildAsReference, useStableBuildAsReference), result, defaultEncoding);
+        serializeAnnotations(result.getAnnotations());
     }
 
     @Override
