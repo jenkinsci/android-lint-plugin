@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>1.63</version>
+    <version>1.64</version>
   </parent>
 
   <artifactId>android-lint</artifactId>
@@ -15,7 +15,7 @@
   <description>Parses Android Lint output and displays the results for analysis.</description>
 
   <properties>
-    <workflow-jenkins-plugin.version>1.4</workflow-jenkins-plugin.version>
+    <workflow-jenkins-plugin.version>1.7</workflow-jenkins-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>analysis-core</artifactId>
-      <version>1.73</version>
+      <version>1.76</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
