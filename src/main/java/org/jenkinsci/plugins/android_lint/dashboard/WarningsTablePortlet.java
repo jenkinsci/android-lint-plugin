@@ -17,27 +17,28 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * @author Ulli Hafner
  */
 public class WarningsTablePortlet extends AbstractWarningsTablePortlet {
+
     /**
-     * Creates a new instance of {@link WarningsTablePortlet}.
-     *
-     * @param name
-     *            the name of the portlet
+     * @see #WarningsTablePortlet(String, boolean)
      */
-    @DataBoundConstructor
+    @Deprecated
     public WarningsTablePortlet(final String name) {
         super(name);
+    }
+
+    /**
+     * @param name                        The display name of the portlet.
+     * @param canHideZeroWarningsProjects Whether to hide projects from this portlet if they have no warnings.
+     */
+    @DataBoundConstructor
+    public WarningsTablePortlet(final String name, final boolean canHideZeroWarningsProjects) {
+        super(name, canHideZeroWarningsProjects);
     }
 
     /** {@inheritDoc} */
     @Override
     protected Class<? extends AbstractProjectAction<?>> getAction() {
         return LintProjectAction.class;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected String getPluginName() {
-        return LintDescriptor.PLUGIN_NAME;
     }
 
     /**
