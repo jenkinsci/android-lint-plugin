@@ -10,7 +10,7 @@
   <artifactId>android-lint</artifactId>
   <packaging>hpi</packaging>
   <name>Android Lint Plugin</name>
-  <version>2.4-SNAPSHOT</version>
+  <version>2.4</version>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Android+Lint+Plugin</url>
   <description>Parses Android Lint output and displays the results for analysis.</description>
 
@@ -80,7 +80,7 @@
     <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>HEAD</tag>
+    <tag>android-lint-2.4</tag>
   </scm>
 
   <repositories>
