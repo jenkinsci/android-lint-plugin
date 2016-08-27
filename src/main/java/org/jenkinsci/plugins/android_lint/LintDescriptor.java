@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.android_lint;
 
+import org.jenkinsci.Symbol;
+
 import hudson.Extension;
 import hudson.plugins.analysis.core.PluginDescriptor;
 
@@ -9,6 +11,7 @@ import hudson.plugins.analysis.core.PluginDescriptor;
  * <p>
  * The class is marked as public so that it can be accessed from views.
  */
+@Symbol("androidLint")
 @Extension(ordinal = 100)
 public final class LintDescriptor extends PluginDescriptor {
 

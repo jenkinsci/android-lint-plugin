@@ -29,11 +29,21 @@
   </developers>
 
   <dependencies>
+    <!-- We build upon the amazing analysis-core functionality -->
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>analysis-core</artifactId>
       <version>1.76</version>
     </dependency>
+
+    <!-- Required for the @Symbol annotation, to make DSL config simpler -->
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>structs</artifactId>
+      <version>1.4</version>
+    </dependency>
+
+    <!-- Pipeline-related test dependencies -->
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-job</artifactId>
