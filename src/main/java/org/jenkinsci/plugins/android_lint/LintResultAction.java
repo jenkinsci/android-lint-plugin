@@ -1,10 +1,13 @@
 package org.jenkinsci.plugins.android_lint;
 
 import hudson.model.AbstractBuild;
+import hudson.model.Action;
 import hudson.model.Run;
 import hudson.plugins.analysis.core.AbstractResultAction;
 import hudson.plugins.analysis.core.HealthDescriptor;
 import hudson.plugins.analysis.core.PluginDescriptor;
+
+import java.util.Collection;
 
 /**
  * Controls the lifecycle of the Lint results.
@@ -73,4 +76,8 @@ public class LintResultAction extends AbstractResultAction<LintResult> {
         return Messages.AndroidLint_ResultAction_Tooltip_Single();
     }
 
+    @Override
+    public Collection<? extends Action> getProjectActions() {
+        return asSet(new LintProjectAction(getJob()));
+    }
 }

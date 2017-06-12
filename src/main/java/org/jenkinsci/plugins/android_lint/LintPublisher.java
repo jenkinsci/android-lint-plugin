@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.android_lint;
 
+import com.google.common.collect.Sets;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.matrix.MatrixAggregator;
@@ -12,6 +13,10 @@ import hudson.plugins.analysis.core.ParserResult;
 import hudson.plugins.analysis.util.PluginLogger;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.android_lint.parser.LintParser;
@@ -108,11 +113,6 @@ public class LintPublisher extends HealthAwarePublisher {
     @DataBoundSetter
     public void setPattern(final String pattern) {
         this.pattern = pattern;
-    }
-
-    @Override
-    public Action getProjectAction(final AbstractProject<?, ?> project) {
-        return new LintProjectAction(project);
     }
 
     @Override

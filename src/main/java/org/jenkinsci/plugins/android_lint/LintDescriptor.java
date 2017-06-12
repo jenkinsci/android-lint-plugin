@@ -21,8 +21,11 @@ public final class LintDescriptor extends PluginDescriptor {
     /** Used to specify location of resources. */
     public static final String PLUGIN_ROOT = "/plugin/android-lint/";
 
+    /** The URL of the result action. */
+    public static final String RESULT_URL = PluginDescriptor.createResultUrlName(PLUGIN_NAME);
+
     /** Icon to use for the result and project action. */
-    private static final String ACTION_ICON = PLUGIN_ROOT + "icons/android-24x24.png";
+    public  static final String ACTION_ICON = PLUGIN_ROOT + "icons/android-24x24.png";
 
     public LintDescriptor() {
         super(LintPublisher.class);
@@ -47,5 +50,4 @@ public final class LintDescriptor extends PluginDescriptor {
     public String getIconUrl() {
         return ACTION_ICON;
     }
-
 }

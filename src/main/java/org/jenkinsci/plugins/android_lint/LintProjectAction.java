@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.android_lint;
 
-import hudson.model.AbstractProject;
+import hudson.model.Job;
 import hudson.plugins.analysis.core.ResultAction;
 import hudson.plugins.analysis.core.AbstractProjectAction;
 
@@ -14,30 +14,20 @@ public class LintProjectAction extends AbstractProjectAction<ResultAction<LintRe
     /**
      * Instantiates a new {@link LintProjectAction}.
      *
-     * @param project The project that owns this action.
+     * @param job The job that owns this action.
      */
-    public LintProjectAction(final AbstractProject<?, ?> project) {
-        this(project, LintResultAction.class);
+    public LintProjectAction(final Job<?, ?> job) {
+        this(job, LintResultAction.class);
     }
 
     /**
      * Instantiates a new {@link LintProjectAction}.
      *
-     * @param project The project that owns this action.
+     * @param job The job that owns this action.
      * @param type The result action type.
      */
-    public LintProjectAction(final AbstractProject<?, ?> project,
+    public LintProjectAction(final Job<?, ?> job,
             final Class<? extends ResultAction<LintResult>> type) {
-        super(project, type, new LintDescriptor());
+        super(job, type, Messages._AndroidLint_ProjectAction_Name(), Messages._AndroidLint_ProjectAction_TrendName(), LintDescriptor.PLUGIN_NAME, LintDescriptor.ACTION_ICON, LintDescriptor.RESULT_URL);
     }
-
-    public String getDisplayName() {
-        return Messages.AndroidLint_ProjectAction_Name();
-    }
-
-    @Override
-    public String getTrendName() {
-        return Messages.AndroidLint_ProjectAction_TrendName();
-    }
-
 }

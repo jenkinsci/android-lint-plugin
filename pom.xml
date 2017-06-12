@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>analysis-core</artifactId>
-      <version>1.76</version>
+      <version>1.87</version>
     </dependency>
 
     <!-- Required for the @Symbol annotation, to make DSL config simpler -->
