@@ -4,93 +4,84 @@ import hudson.FilePath;
 import hudson.model.Result;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.jenkinsci.plugins.workflow.job.WorkflowRun;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.jvnet.hudson.test.BuildWatcher;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class LintWorkflowTest {
+
+    @ClassRule
+    public static BuildWatcher bw = new BuildWatcher();
 
     @Rule
     public JenkinsRule jenkinsRule = new JenkinsRule();
 
-    /**
-     * Run a workflow job using {@link LintPublisher} and check for success.
-     */
     @Test
     public void lintPublisherWorkflowStep() throws Exception {
-        WorkflowJob job = jenkinsRule.jenkins.createProject(WorkflowJob.class, "lintPublisherWorkflowStep");
-        FilePath workspace = jenkinsRule.jenkins.getWorkspaceFor(job);
-        FilePath report = workspace.child("target").child("lint-results.xml");
-        report.copyFrom(getClass().getResourceAsStream("./parser/lint-results_r20.xml"));
-        job.setDefinition(new CpsFlowDefinition(""
-                        + "node {\n"
-                        + "  step([$class: 'LintPublisher'])\n"
-                        + "}\n", true)
-        );
-        jenkinsRule.assertBuildStatusSuccess(job.scheduleBuild2(0));
-        LintResultAction result = job.getLastBuild().getAction(LintResultAction.class);
-        assertEquals(4, result.getResult().getAnnotations().size());
+        runLintWorkflowAndAssertResult("step([$class: 'LintPublisher'])", Result.SUCCESS, 4);
     }
 
-    /**
-     * Run a workflow job using {@link LintPublisher} with a failing threshold of 0, so the given example file
-     * "/org/jenkinsci/plugins/android_lint/parser/lint-results_r20.xml" will make the build to fail.
-     */
     @Test
     public void lintPublisherWorkflowStepSetLimits() throws Exception {
-        WorkflowJob job = jenkinsRule.jenkins.createProject(WorkflowJob.class, "lintPublisherWorkflowStepSetLimits");
-        FilePath workspace = jenkinsRule.jenkins.getWorkspaceFor(job);
-        FilePath report = workspace.child("target").child("lint-results.xml");
-        report.copyFrom(getClass().getResourceAsStream("./parser/lint-results_r20.xml"));
-        job.setDefinition(new CpsFlowDefinition(""
-                        + "node {\n"
-                        + "  step([$class: 'LintPublisher', pattern: '**/lint-results.xml', failedTotalAll: '0', usePreviousBuildAsReference: false])\n"
-                        + "}\n", true)
+        runLintWorkflowAndAssertResult(
+                "step([$class: 'LintPublisher', pattern: '**/lint-results.xml', failedTotalAll: '0', usePreviousBuildAsReference: false])",
+                Result.FAILURE,
+                4
         );
-        jenkinsRule.assertBuildStatus(Result.FAILURE, job.scheduleBuild2(0).get());
-        LintResultAction result = job.getLastBuild().getAction(LintResultAction.class);
-        assertEquals(4, result.getResult().getAnnotations().size());
     }
 
-    /**
-     * Run a workflow job using {@link LintPublisher} with a unstable threshold of 0, so the given example file
-     * "/org/jenkinsci/plugins/android_lint/parser/lint-results_r20.xml" will make the build to fail.
-     */
     @Test
     public void lintPublisherWorkflowStepFailure() throws Exception {
-        WorkflowJob job = jenkinsRule.jenkins.createProject(WorkflowJob.class, "lintPublisherWorkflowStepFailure");
-        FilePath workspace = jenkinsRule.jenkins.getWorkspaceFor(job);
-        FilePath report = workspace.child("target").child("lint-results.xml");
-        report.copyFrom(getClass().getResourceAsStream("./parser/lint-results_r20.xml"));
-        job.setDefinition(new CpsFlowDefinition(""
-                        + "node {\n"
-                        + "  step([$class: 'LintPublisher', pattern: '**/lint-results.xml', unstableTotalAll: '0', usePreviousBuildAsReference: false])\n"
-                        + "}\n")
+        runLintWorkflowAndAssertResult(
+                "step([$class: 'LintPublisher', pattern: 'target/lint-results.xml', unstableTotalAll: '0', usePreviousBuildAsReference: false])",
+                Result.UNSTABLE,
+                4
         );
-        jenkinsRule.assertBuildStatus(Result.UNSTABLE, job.scheduleBuild2(0).get());
-        LintResultAction result = job.getLastBuild().getAction(LintResultAction.class);
-        assertEquals(4, result.getResult().getAnnotations().size());
     }
 
-    /**
-     * This test aims to verify that a non-default pattern works fine.
-     */
     @Test
     public void lintPublisherWorkflowStepUsingNotDefaultPattern() throws Exception {
-        WorkflowJob job = jenkinsRule.jenkins.createProject(WorkflowJob.class, "lintPublisherWorkflowStepFailure");
-        FilePath workspace = jenkinsRule.jenkins.getWorkspaceFor(job);
-        FilePath report = workspace.child("output").child("my-lint-results.xml");
-        report.copyFrom(getClass().getResourceAsStream("./parser/lint-results_r20.xml"));
-        job.setDefinition(new CpsFlowDefinition(""
-                        + "node {\n"
-                        + "  step([$class: 'LintPublisher', pattern: 'output/my-lint-results.xml'])\n"
-                        + "}\n")
+        runLintWorkflowAndAssertResult(
+                "output/results.xml",
+                "step([$class: 'LintPublisher', pattern: 'output/results.xml'])",
+                Result.SUCCESS,
+                4
         );
-        jenkinsRule.assertBuildStatus(Result.SUCCESS, job.scheduleBuild2(0).get());
-        LintResultAction result = job.getLastBuild().getAction(LintResultAction.class);
-        assertEquals(4, result.getResult().getAnnotations().size());
     }
+
+    private void runLintWorkflowAndAssertResult(String step, Result expectedResult, int expectedIssueCount) throws Exception {
+        runLintWorkflowAndAssertResult("target/lint-results.xml", step, expectedResult, expectedIssueCount);
+    }
+
+    private void runLintWorkflowAndAssertResult(String targetPath, String step,
+                                                Result expectedResult, int expectedIssueCount) throws Exception {
+        // Create a Pipeline job with the given step
+        WorkflowJob job = jenkinsRule.createProject(WorkflowJob.class);
+        job.setDefinition(new CpsFlowDefinition(""
+                + "node {\n"
+                + "  " + step + "\n"
+                + "}\n", true)
+        );
+
+        // Place a Lint results file somewhere in the workspace
+        String[] path = targetPath.split("/");
+        FilePath workspace = jenkinsRule.jenkins.getWorkspaceFor(job);
+        workspace.child(path[0]).child(path[1]).copyFrom(getClass().getResourceAsStream("./parser/lint-results_r20.xml"));
+
+        // Enqueue a build of the project, wait for it to complete, and check the result
+        WorkflowRun build = jenkinsRule.assertBuildStatus(expectedResult, job.scheduleBuild2(0));
+
+        // Check that Lint results were added to the build, and the expected number of issues were found
+        LintResultAction action = build.getAction(LintResultAction.class);
+        assertNotNull(action);
+        assertEquals(expectedIssueCount, action.getResult().getAnnotations().size());
+    }
+
 }
 
