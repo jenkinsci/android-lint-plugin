@@ -23,6 +23,11 @@ public class LintWorkflowTest {
     public JenkinsRule jenkinsRule = new JenkinsRule();
 
     @Test
+    public void lintPublisherWorkflowStep_Symbol() throws Exception {
+        runLintWorkflowAndAssertResult("androidLint()", Result.SUCCESS, 4);
+    }
+
+    @Test
     public void lintPublisherWorkflowStep() throws Exception {
         runLintWorkflowAndAssertResult("step([$class: 'LintPublisher'])", Result.SUCCESS, 4);
     }
