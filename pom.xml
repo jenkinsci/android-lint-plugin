@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>1.64</version>
+    <version>1.67-20170902.033418-2</version> <!-- TODO: https://github.com/jenkinsci/analysis-pom-plugin/pull/6 -->
   </parent>
 
   <artifactId>android-lint</artifactId>
@@ -15,7 +15,7 @@
   <description>Parses Android Lint output and displays the results for analysis.</description>
 
   <properties>
-    <workflow-jenkins-plugin.version>1.7</workflow-jenkins-plugin.version>
+    <jenkins.version>2.7</jenkins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -33,33 +33,51 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>analysis-core</artifactId>
-      <version>1.87</version>
+      <version>1.92</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- Required for the @Symbol annotation, to make DSL config simpler -->
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>structs</artifactId>
-      <version>1.4</version>
+      <version>1.10</version>
     </dependency>
 
     <!-- Pipeline-related test dependencies -->
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-job</artifactId>
-      <version>${workflow-jenkins-plugin.version}</version>
+      <artifactId>workflow-aggregator</artifactId>
+      <version>2.5</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jenkinsci.plugins</groupId>
+          <artifactId>pipeline-model-definition</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+     <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>mailer</artifactId>
+      <version>1.20</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-cps</artifactId>
-      <version>${workflow-jenkins-plugin.version}</version>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>scm-api</artifactId>
+      <version>2.2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-basic-steps</artifactId>
-      <version>${workflow-jenkins-plugin.version}</version>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>script-security</artifactId>
+      <version>1.34</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -67,11 +85,9 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <additionalparam>-Xdoclint:none</additionalparam>
-        </configuration>
+        <groupId>org.jenkins-ci.tools</groupId>
+        <artifactId>maven-hpi-plugin</artifactId>
+        <version>2.1-20170831.191235-1</version> <!-- TODO: https://github.com/jenkinsci/maven-hpi-plugin/pull/63 -->
       </plugin>
     </plugins>
   </build>
@@ -96,12 +112,5 @@
       <url>http://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
-
-  <distributionManagement>
-    <repository>
-      <id>maven.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/releases</url>
-    </repository>
-  </distributionManagement>
 
 </project>
