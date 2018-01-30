@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>analysis-core</artifactId>
-      <version>1.92</version>
+      <version>1.94</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.commons</groupId>

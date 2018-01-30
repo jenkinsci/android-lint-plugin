@@ -1,8 +1,12 @@
 package org.jenkinsci.plugins.android_lint.parser;
 
 import hudson.plugins.analysis.core.AbstractAnnotationParser;
+import hudson.plugins.analysis.util.SecureDigester;
 import hudson.plugins.analysis.util.model.FileAnnotation;
 import hudson.plugins.analysis.util.model.Priority;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.jenkinsci.plugins.android_lint.Messages;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.digester.Digester;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.jenkinsci.plugins.android_lint.Messages;
-import org.xml.sax.SAXException;
 
 /** A parser for Android Lint XML files. */
 public class LintParser extends AbstractAnnotationParser {
@@ -46,9 +45,7 @@ public class LintParser extends AbstractAnnotationParser {
     public Collection<FileAnnotation> parse(final InputStream file, final String moduleName)
             throws InvocationTargetException {
         try {
-            Digester digester = new Digester();
-            digester.setValidating(false);
-            digester.setClassLoader(LintParser.class.getClassLoader());
+            SecureDigester digester = new SecureDigester(LintParser.class);
 
             List<LintIssue> issues = new ArrayList<LintIssue>();
             digester.push(issues);
@@ -66,9 +63,7 @@ public class LintParser extends AbstractAnnotationParser {
             digester.parse(file);
 
             return convert(issues, moduleName);
-        } catch (IOException exception) {
-            throw new InvocationTargetException(exception);
-        } catch (SAXException exception) {
+        } catch (IOException | SAXException exception) {
             throw new InvocationTargetException(exception);
         }
     }
